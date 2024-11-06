@@ -1,3 +1,5 @@
+#Inteprete  = control+p > Python Selected 
+
 # FastAPI Project Setup
 
 ## 1. Activar el entorno de conda llamado 'fastapi'
