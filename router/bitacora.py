@@ -61,3 +61,12 @@ def delete_bitacora(bitacora_id: int, db: Session = Depends(get_db)):
     db.delete(db_bitacora)
     db.commit()
     return db_bitacora
+
+
+#obtener todos los bitacoras por por id usuario 
+@router.get("/usuario/{usuario_id}", response_model=List[schemas.Bitacora])
+def get_bitacoras_by_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    db_bitacoras = db.query(models.Bitacora).filter(models.Bitacora.id_usr == usuario_id).all()
+    if db_bitacoras is None:
+        raise HTTPException(status_code=404, detail="Bitacoras not found")
+    return db_bitacoras

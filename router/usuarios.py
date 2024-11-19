@@ -24,6 +24,26 @@ def get_usuario(usuario_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Usuario not found")
     return db_usuario
 
+ 
+#cambia el estado del usuario de activo o inactivo pasando parametro usuario_id y el estado true o false
+@router.put("/estado/{usuario_id}", response_model=schemas.Usuario)
+def update_estado_usuario(usuario_id: int, estado: bool, db: Session = Depends(get_db)):
+    # Fetch the user by ID
+    db_usuario = db.query(models.Usuario).filter(models.Usuario.id_usr == usuario_id).first()
+    
+    # If the user does not exist, raise a 404 error
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario not found")
+    
+    # Update the user's active status
+    db_usuario.activo = estado
+    db.commit()
+    db.refresh(db_usuario)
+    
+    # Return the updated user
+    return db_usuario
+
+
 
 #obtener un usuario por nombre
 @router.get("/nombre/{nombre_usr}", response_model=schemas.Usuario)
@@ -42,7 +62,7 @@ def get_usuario(nombre_usr: str, db: Session = Depends(get_db)):
     return db_usuario
 
 # buscar usuario por nombre de usuario y password
-@router.post("/login", response_model=schemas.Usuario)
+@router.post("/login/user/pass", response_model=schemas.Usuario)
 def login(usuario: schemas.UsuarioLogin, db: Session = Depends(get_db)):
     db_usuario = db.query(models.Usuario).filter(models.Usuario.username == usuario.username).first()
     if db_usuario is None:

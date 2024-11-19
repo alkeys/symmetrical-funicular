@@ -29,3 +29,15 @@ uvicorn main:app --reload
 ```bash
 http://127.0.0.1:8000/docs
 ```
+
+
+#configuracion de requirements.txt
+```
+fastapi
+uvicorn[standard]
+pymysql
+sqlalchemy
+cryptography
+psycopg2-binary
+bcrypt
+```

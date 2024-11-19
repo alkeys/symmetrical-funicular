@@ -18,7 +18,7 @@ def get_db():
 
 @router.post("/", response_model=schemas.Vehiculo)
 def create_vehiculo(vehiculo: schemas.VehiculoCreate, db: Session = Depends(get_db)):
-    db_vehiculo = models.Vehiculos(**vehiculo.dict())
+    db_vehiculo = models.Vehiculo(**vehiculo.dict())
     db.add(db_vehiculo)
     db.commit()
     db.refresh(db_vehiculo)
@@ -27,7 +27,7 @@ def create_vehiculo(vehiculo: schemas.VehiculoCreate, db: Session = Depends(get_
 
 @router.get("/", response_model=List[schemas.Vehiculo])
 def get_vehiculos(db: Session = Depends(get_db)):
-    return db.query(models.Vehiculos).all()
+    return db.query(models.Vehiculo).all()
 
 
 @router.get("/{vehiculo_id}", response_model=schemas.Vehiculo)
