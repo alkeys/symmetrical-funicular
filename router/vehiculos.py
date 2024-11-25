@@ -32,7 +32,7 @@ def get_vehiculos(db: Session = Depends(get_db)):
 
 @router.get("/{vehiculo_id}", response_model=schemas.Vehiculo)
 def get_vehiculo(vehiculo_id: int, db: Session = Depends(get_db)):
-    db_vehiculo = db.query(models.Vehiculos).filter(models.Vehiculos.id_vehiculo == vehiculo_id).first()
+    db_vehiculo = db.query(models.Vehiculo).filter(models.Vehiculo.id_vehiculo == vehiculo_id).first()
     if db_vehiculo is None:
         raise HTTPException(status_code=404, detail="Vehiculo not found")
     return db_vehiculo
@@ -40,7 +40,7 @@ def get_vehiculo(vehiculo_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{vehiculo_id}", response_model=schemas.Vehiculo)
 def update_vehiculo(vehiculo_id: int, vehiculo: schemas.VehiculoCreate, db: Session = Depends(get_db)):
-    db_vehiculo = db.query(models.Vehiculos).filter(models.Vehiculos.id_vehiculo == vehiculo_id).first()
+    db_vehiculo = db.query(models.Vehiculo).filter(models.Vehiculo.id_vehiculo == vehiculo_id).first()
     if db_vehiculo is None:
         raise HTTPException(status_code=404, detail="Vehiculo not found")
 
@@ -54,7 +54,7 @@ def update_vehiculo(vehiculo_id: int, vehiculo: schemas.VehiculoCreate, db: Sess
 
 @router.delete("/{vehiculo_id}", response_model=schemas.Vehiculo)
 def delete_vehiculo(vehiculo_id: int, db: Session = Depends(get_db)):
-    db_vehiculo = db.query(models.Vehiculos).filter(models.Vehiculos.id_vehiculo == vehiculo_id).first()
+    db_vehiculo = db.query(models.Vehiculo).filter(models.Vehiculo.id_vehiculo == vehiculo_id).first()
     if db_vehiculo is None:
         raise HTTPException(status_code=404, detail="Vehiculo not found")
 

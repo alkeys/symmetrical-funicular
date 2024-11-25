@@ -31,5 +31,5 @@ app.include_router(proyecto_router, prefix="/proyecto", tags=["proyecto"])
 
 @app.get("/")
 def read_root():
-    return {"API": "Proyecto Final API Mariadb"}
+    return {"API": "Proyecto Final - API REST - FastAPI - Python -GASOLINERA"}
 

@@ -42,4 +42,4 @@ def get_logs_by_usuario_logout(usuario_id: int, db: Session = Depends(get_db)):
     db_logs = db.query(models.Log).filter(models.Log.id_usr == usuario_id).filter(models.Log.descripcion == "User logout").all()
     if db_logs is None:
         raise HTTPException(status_code=404, detail="Logs not found")
-    return db_logs
+    return 

@@ -97,19 +97,25 @@ def get_usuarios(db: Session = Depends(get_db)):
             usuario.id_rol = 1  # o cualquier valor por defecto
     return db_usuarios
 
-
+#actualiza un usuario por id 
 @router.put("/{usuario_id}", response_model=schemas.Usuario)
 def update_usuario(usuario_id: int, usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
     db_usuario = db.query(models.Usuario).filter(models.Usuario.id_usr == usuario_id).first()
     if db_usuario is None:
         raise HTTPException(status_code=404, detail="Usuario not found")
-
+    
+    # Actualizar los campos del usuario
     for key, value in usuario.dict().items():
-        setattr(db_usuario, key, value)
+        if key == "password" and value:  # Solo encriptar si la contraseña no está vacía
+            hashed_password = bcrypt.hashpw(value.encode('utf-8'), bcrypt.gensalt())
+            setattr(db_usuario, key, hashed_password.decode('utf-8'))
+        elif key != "password":  # Para otros campos, simplemente actualízalos
+            setattr(db_usuario, key, value)
 
     db.commit()
     db.refresh(db_usuario)
     return db_usuario
+
 
 
 @router.delete("/{usuario_id}", response_model=schemas.Usuario)
@@ -121,3 +127,15 @@ def delete_usuario(usuario_id: int, db: Session = Depends(get_db)):
     db.delete(db_usuario)
     db.commit()
     return db_usuario
+
+
+#obtine el rol de un usuario
+@router.get("/rol/{usuario_id}", response_model=schemas.Rol)
+def get_rol(usuario_id: int, db: Session = Depends(get_db)):
+    db_usuario = db.query(models.Usuario).filter(models.Usuario.id_usr == usuario_id).first()
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario not found")
+    db_rol = db.query(models.Rol).filter(models.Rol.id_rol == db_usuario.id_rol).first()
+    if db_rol is None:
+        raise HTTPException(status_code=404, detail="Rol not found")
+    return db_rol
